@@ -14,7 +14,7 @@ const modules = [
     {
         id: "safety-intel", title: "Safety Intelligence",
         subtitle: "Pattern recognition across all safety data",
-        icon: "◈", color: "#10B981", href: "/safety", status: "building",
+        icon: "◈", color: "#10B981", href: "/safety", status: "live",
         description: "Weak signal detection · Predictive alerts · Cross-fleet anonymised trends",
     },
     {
