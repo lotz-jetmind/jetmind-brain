@@ -26,7 +26,7 @@ const modules = [
     {
         id: "shadow-audit", title: "Shadow Audit",
         subtitle: "Continuous compliance monitoring",
-        icon: "◇", color: "#F59E0B", href: "/audit", status: "building",
+        icon: "◇", color: "#F59E0B", href: "/audit", status: "live",
         description: "Always-on audit state · Auditor export on demand · Zero-prep compliance",
     },
     {
