@@ -33,7 +33,7 @@ export async function GET() {
 
     try {
         // 1) All orgs
-        const orgs = await prisma.organisation.findMany({
+        const orgs = await prisma.organization.findMany({
             select: {
                 id: true,
                 name: true,
@@ -127,7 +127,7 @@ export async function GET() {
             arr.find(r => r.orgId === id)?._count.id ?? 0;
 
         // 5) Assemble results
-        const results: TenantHealth[] = orgs.map(org => {
+        const results: TenantHealth[] = orgs.map((org: { id: string; name: string | null; slug: string; _count: { users: number } }) => {
             const openL1 = lookup(openL1Findings, org.id);
             const openL2 = lookup(openL2Findings, org.id);
             const overdue = lookup(overdueFindings, org.id);

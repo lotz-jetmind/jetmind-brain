@@ -136,21 +136,6 @@ export default function HomePage() {
 
             <div style={{ maxWidth: 1200, margin: "0 auto", padding: "40px 24px 120px" }}>
 
-                            return (
-                                <a key={a.id} href={a.href} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px", borderRadius: 10, marginBottom: 6, textDecoration: "none", background: `${alertColor}08`, border: `1px solid ${alertColor}25`, transition: "border-color 0.15s" }}
-                                    onMouseEnter={e => (e.currentTarget.style.borderColor = `${alertColor}50`)}
-                                    onMouseLeave={e => (e.currentTarget.style.borderColor = `${alertColor}25`)}
-                                >
-                                    <span style={{ fontSize: 9, fontWeight: 800, padding: "2px 7px", borderRadius: 4, background: `${alertColor}20`, color: alertColor, letterSpacing: "0.05em", flexShrink: 0 }}>{a.severity}</span>
-                                    <span style={{ fontSize: 13, fontWeight: 600, color: "white" }}>{a.title}</span>
-                                    <span style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>{a.description}</span>
-                                    <span style={{ marginLeft: "auto", fontSize: 12, color: "rgba(255,255,255,0.25)" }}>→</span>
-                                </a>
-                            );
-                        })}
-                    </div>
-                )}
-
                 {/* Platform stats bar */}
                 {stats && (
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 10, marginBottom: 36, padding: "16px 20px", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 14 }}>
