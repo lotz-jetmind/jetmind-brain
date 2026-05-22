@@ -3,6 +3,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import type { Alert } from "@/app/api/alerts/route";
 
 const modules = [
     { id: "knowledge-graph", title: "Regulation Graph", subtitle: "EASA requirements as machine-readable knowledge", icon: "⬡", color: "#00D4FF", href: "/graph", status: "building", description: "Live compliance score · Automatic gap detection · Linked evidence" },
@@ -28,8 +29,6 @@ type PlatformStats = {
     brain: { memories: number };
 };
 
-type Alert = { id: string; severity: "CRITICAL" | "HIGH" | "MEDIUM"; title: string; description: string; href: string };
-
 export default function HomePage() {
     const { data: session, status } = useSession();
     const router = useRouter();
@@ -43,7 +42,10 @@ export default function HomePage() {
     useEffect(() => {
         if (status === "authenticated") {
             fetch("/api/stats").then(r => r.json()).then(setStats).catch(() => {});
-            fetch("/api/alerts").then(r => r.json()).then(d => setAlerts(Array.isArray(d) ? d : [])).catch(() => {});
+            fetch("/api/alerts")
+                .then(r => r.json())
+                .then(data => { if (Array.isArray(data)) setAlerts(data); })
+                .catch(() => {});
         }
     }, [status]);
 
@@ -82,13 +84,58 @@ export default function HomePage() {
                 </div>
             </header>
 
+            {/* Global Alert Banner */}
+            {alerts.length > 0 && (
+                <div style={{ maxWidth: 1152, margin: "0 auto", padding: "24px 24px 0" }}>
+                    {alerts.slice(0, 3).map(a => (
+                        <a
+                            href={a.href}
+                            key={a.id}
+                            style={{
+                                display: "flex", alignItems: "center", gap: 12,
+                                padding: "10px 16px", borderRadius: 10, marginBottom: 6,
+                                textDecoration: "none",
+                                background:
+                                    a.severity === "CRITICAL" ? "rgba(239,68,68,0.08)"
+                                    : a.severity === "HIGH" ? "rgba(245,158,11,0.08)"
+                                    : "rgba(100,116,139,0.08)",
+                                border: `1px solid ${
+                                    a.severity === "CRITICAL" ? "rgba(239,68,68,0.25)"
+                                    : a.severity === "HIGH" ? "rgba(245,158,11,0.25)"
+                                    : "rgba(100,116,139,0.15)"
+                                }`,
+                                transition: "opacity 0.15s ease",
+                            }}
+                            onMouseEnter={e => (e.currentTarget.style.opacity = "0.8")}
+                            onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+                        >
+                            <span style={{
+                                fontSize: 11, fontWeight: 800, padding: "2px 6px", borderRadius: 4, flexShrink: 0,
+                                background:
+                                    a.severity === "CRITICAL" ? "rgba(239,68,68,0.2)"
+                                    : a.severity === "HIGH" ? "rgba(245,158,11,0.2)"
+                                    : "rgba(100,116,139,0.15)",
+                                color:
+                                    a.severity === "CRITICAL" ? "#EF4444"
+                                    : a.severity === "HIGH" ? "#F59E0B"
+                                    : "#94A3B8",
+                            }}>
+                                {a.severity}
+                            </span>
+                            <span style={{ fontSize: 13, fontWeight: 600, color: "white", flexShrink: 0 }}>
+                                {a.title}
+                            </span>
+                            <span style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                {a.description}
+                            </span>
+                            <span style={{ marginLeft: "auto", fontSize: 12, color: "rgba(255,255,255,0.3)", flexShrink: 0 }}>→</span>
+                        </a>
+                    ))}
+                </div>
+            )}
+
             <div style={{ maxWidth: 1200, margin: "0 auto", padding: "40px 24px 120px" }}>
 
-                {/* Alert banner */}
-                {alerts.length > 0 && (
-                    <div style={{ marginBottom: 28 }}>
-                        {alerts.slice(0, 4).map(a => {
-                            const alertColor = a.severity === "CRITICAL" ? "#EF4444" : a.severity === "HIGH" ? "#F59E0B" : "#64748B";
                             return (
                                 <a key={a.id} href={a.href} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px", borderRadius: 10, marginBottom: 6, textDecoration: "none", background: `${alertColor}08`, border: `1px solid ${alertColor}25`, transition: "border-color 0.15s" }}
                                     onMouseEnter={e => (e.currentTarget.style.borderColor = `${alertColor}50`)}
