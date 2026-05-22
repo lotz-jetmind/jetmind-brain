@@ -20,7 +20,6 @@ declare module "next-auth" {
             role:      string;
             opsRole:   string;
             orgId:     string | null;
-            aiEnabled: boolean;
         };
     }
 }
@@ -31,7 +30,6 @@ declare module "next-auth/jwt" {
         role:      string;
         opsRole:   string;
         orgId:     string | null;
-        aiEnabled: boolean;
     }
 }
 
@@ -75,7 +73,6 @@ export const authOptions: NextAuthOptions = {
                     role:      user.role,
                     opsRole:   user.opsRole ?? "NONE",
                     orgId:     user.orgId,
-                    aiEnabled: user.aiEnabled ?? true,
                 };
             },
         }),
@@ -84,23 +81,21 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.id        = user.id;
-                token.role      = (user as { role: string }).role;
-                token.opsRole   = (user as { opsRole: string }).opsRole;
-                token.orgId     = (user as { orgId: string | null }).orgId;
-                token.aiEnabled = (user as { aiEnabled: boolean }).aiEnabled;
+                token.id      = user.id;
+                token.role    = (user as { role: string }).role;
+                token.opsRole = (user as { opsRole: string }).opsRole;
+                token.orgId   = (user as { orgId: string | null }).orgId;
             }
             return token;
         },
         async session({ session, token }) {
             session.user = {
-                id:        token.id,
-                email:     token.email ?? "",
-                name:      token.name ?? null,
-                role:      token.role,
-                opsRole:   token.opsRole,
-                orgId:     token.orgId,
-                aiEnabled: token.aiEnabled,
+                id:      token.id,
+                email:   token.email ?? "",
+                name:    token.name ?? null,
+                role:    token.role,
+                opsRole: token.opsRole,
+                orgId:   token.orgId,
             };
             return session;
         },
