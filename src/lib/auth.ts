@@ -61,8 +61,8 @@ export const authOptions: NextAuthOptions = {
                     where: { email: credentials.email.toLowerCase() },
                 });
 
-                if (!user?.passwordHash) return null;
-                const valid = await bcrypt.compare(credentials.password, user.passwordHash);
+                if (!user?.hashedPassword) return null;
+                const valid = await bcrypt.compare(credentials.password, user.hashedPassword);
                 if (!valid) return null;
 
                 // Brain access: SuperAdmin only
