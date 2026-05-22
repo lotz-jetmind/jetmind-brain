@@ -32,7 +32,7 @@ const modules = [
     {
         id: "manuals", title: "Auto-Manual",
         subtitle: "Manuals that update themselves",
-        icon: "▣", color: "#EC4899", href: "/manuals", status: "planned",
+        icon: "▣", color: "#EC4899", href: "/manuals", status: "live",
         description: "EASA change → diff-based manual update proposal · Structured content engine",
     },
     {
